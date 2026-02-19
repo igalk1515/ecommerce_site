@@ -1,0 +1,15 @@
+{
+  "name": "hebrew-sports-store",
+  "private": true,
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "dev": "pnpm -r --parallel --if-present dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r --if-present test",
+    "db:migrate": "pnpm --filter @store/api prisma:migrate",
+    "db:seed": "pnpm --filter @store/api prisma:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
