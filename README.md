@@ -26,6 +26,30 @@ Monorepo sports e-commerce project inspired by local sports stores, with origina
 Web: http://localhost:3000
 API: http://localhost:4000
 
+
+## Environment Variables (`.env`)
+
+Copy `.env.example` to `.env` and adjust values per environment.
+
+| Key | Required | Why it exists |
+|---|---|---|
+| `DATABASE_URL` | Yes | Prisma + API DB connection string to PostgreSQL. |
+| `JWT_SECRET` | Yes | Signs and verifies JWT tokens stored in httpOnly auth cookies. |
+| `WEB_ORIGIN` | Yes | Allowed CORS origins for API requests from the web app. |
+| `PORT` | No (default `4000`) | API server listening port. |
+| `STRIPE_SECRET_KEY` | Optional | Enables Stripe Checkout session creation in test mode. |
+| `STRIPE_WEB_URL` | Required if Stripe enabled | Base storefront URL for Stripe success/cancel redirects. |
+| `SMTP_HOST` | Optional | Future-ready SMTP provider host. If empty, emails are logged in console. |
+| `SMTP_PORT` | Optional | SMTP provider port. |
+| `SMTP_USER` | Optional | SMTP username. |
+| `SMTP_PASS` | Optional | SMTP password/token. |
+| `SMTP_FROM` | Optional | Default sender address for transactional emails. |
+| `NEXT_PUBLIC_API_URL` | Yes | Frontend API base URL. |
+| `NEXT_PUBLIC_SITE_URL` | Yes | Canonical public URL for SEO metadata and sitemap. |
+| `NEXT_PUBLIC_GA4_ID` | Optional | Turns on GA4 script injection when set. |
+
+> Security note: values prefixed with `NEXT_PUBLIC_` are exposed to the browser by design. Never place secrets in `NEXT_PUBLIC_*` keys.
+
 ## Scripts
 - `pnpm dev`
 - `pnpm db:migrate`
