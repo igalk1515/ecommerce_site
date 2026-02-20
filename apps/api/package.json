@@ -7,8 +7,8 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "test": "vitest run",
-    "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:migrate": "node scripts/with-root-env.mjs prisma migrate dev",
+    "prisma:seed": "node scripts/with-root-env.mjs tsx prisma/seed.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^10.0.1",

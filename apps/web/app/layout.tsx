@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const gaId = process.env.NEXT_PUBLIC_GA4_ID;
   return (
     <html lang="he" dir="rtl">
-      <body>
+      <body suppressHydrationWarning>
         <Header />
         {children}
         <WhatsAppButton />

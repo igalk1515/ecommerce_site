@@ -91,7 +91,22 @@ export async function registerRoutes(app: FastifyInstance) {
   app.get("/cart", async (request) => {
     const cartId = request.cookies.cartId;
     if (!cartId) return { items: [], subtotalAgorot: 0 };
-    const cart = await prisma.cart.findUnique({ where: { id: cartId }, include: { items: { include: { variant: { include: { product: true } } } } } });
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: {
+        items: {
+          include: {
+            variant: {
+              include: {
+                product: {
+                  include: { variants: true }
+                }
+              }
+            }
+          }
+        }
+      }
+    });
     if (!cart) return { items: [], subtotalAgorot: 0 };
     const subtotalAgorot = cart.items.reduce((sum, i) => sum + i.quantity * i.variant.priceAgorot, 0);
     return { ...cart, subtotalAgorot };
@@ -99,8 +114,22 @@ export async function registerRoutes(app: FastifyInstance) {
 
   app.patch("/cart/items/:id", async (request) => {
     const { id } = request.params as { id: string };
-    const { quantity } = z.object({ quantity: z.number().int().min(1) }).parse(request.body);
-    await prisma.cartItem.update({ where: { id }, data: { quantity } });
+    const { quantity, variantId } = z
+      .object({ quantity: z.number().int().min(1).optional(), variantId: z.string().min(1).optional() })
+      .refine((data) => data.quantity !== undefined || data.variantId !== undefined, { message: "quantity or variantId required" })
+      .parse(request.body);
+    const existing = await prisma.cartItem.findUnique({ where: { id } });
+    if (!existing) return { ok: true };
+    if (!variantId || variantId === existing.variantId) {
+      await prisma.cartItem.update({ where: { id }, data: { quantity } });
+      return { ok: true };
+    }
+    await prisma.cartItem.upsert({
+      where: { cartId_variantId: { cartId: existing.cartId, variantId } },
+      update: { quantity: { increment: quantity ?? existing.quantity } },
+      create: { cartId: existing.cartId, variantId, quantity: quantity ?? existing.quantity }
+    });
+    await prisma.cartItem.delete({ where: { id } });
     return { ok: true };
   });
 

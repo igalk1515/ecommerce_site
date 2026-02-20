@@ -13,8 +13,8 @@ export default function AdminLogin() {
         await api("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
         window.location.href = "/admin";
       }}>
-        <input className="border p-2 rounded w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <input className="border p-2 rounded w-full" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input className="border p-2 rounded w-full" type="email" autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input className="border p-2 rounded w-full" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <button className="btn w-full">כניסה</button>
       </form>
     </main>

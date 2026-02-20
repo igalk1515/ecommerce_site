@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { api, currency } from "../../lib/api";
+import { api } from "../../lib/api";
+import { ProductsGrid } from "../../components/products-grid";
 
 export default async function ProductsPage({ searchParams }: { searchParams: Record<string, string> }) {
   const q = new URLSearchParams(searchParams).toString();
@@ -15,15 +15,7 @@ export default async function ProductsPage({ searchParams }: { searchParams: Rec
         <input name="color" placeholder="צבע" className="border rounded p-2" />
         <button className="btn">סינון</button>
       </form>
-      <div className="grid md:grid-cols-4 gap-4">
-        {products.map((p) => (
-          <Link key={p.id} className="card" href={`/products/${p.slug}`}>
-            <img src={p.images[0]?.url} alt={p.name} className="rounded-lg" />
-            <h3 className="mt-2">{p.name}</h3>
-            <p>{currency(p.variants[0]?.priceAgorot ?? 0)}</p>
-          </Link>
-        ))}
-      </div>
+      <ProductsGrid products={products} />
     </main>
   );
 }

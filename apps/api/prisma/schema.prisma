@@ -122,6 +122,7 @@ model Address {
   street     String
   postalCode String
   user       User?    @relation(fields: [userId], references: [id])
+  orders     Order[]
 }
 
 model Order {
@@ -162,3 +163,4 @@ model ShippingSetting {
   freeShippingThreshold Int
   slaText               String
 }
+
